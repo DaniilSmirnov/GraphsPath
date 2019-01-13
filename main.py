@@ -62,7 +62,7 @@ class Ui_MainWindow(object):
         matrix = [(1, 2), (1, 3), (4, 2), (5, 1), (5, 2), (5, 3)]
         G.add_edges_from(matrix)
 
-        nx.draw(G, with_labels=True)
+        nx.draw(G)
 
         self.canvas.draw()
 
