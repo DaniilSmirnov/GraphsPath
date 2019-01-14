@@ -6,6 +6,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import networkx as nx
 
+matrix = []
 
 class MainWidget(QWidget):
 
@@ -50,13 +51,14 @@ class MainWidget(QWidget):
         self.gridLayout.addWidget(self.canvas, 0, 3, 9, 9)
 
         self.spinBox.valueChanged.connect(self.matrix_draw)
+        self.tableWidget.cellChanged.connect(self.get_matrix)
 
         self.show()
         #self.plot3()
 
     def matrix_draw(self):
         amount = int(self.spinBox.text())
-        i = 0
+        i = 1
         self.tableWidget.setRowCount(amount)
         self.tableWidget.setColumnCount(amount)
         headers = []
@@ -66,10 +68,38 @@ class MainWidget(QWidget):
         self.tableWidget.setHorizontalHeaderLabels(headers)
         self.tableWidget.setVerticalHeaderLabels(headers)
 
+    def get_matrix(self):
+        amount = int(self.spinBox.text())
+
+        exec = True
+        i = 1
+        j = 1
+        while i < amount:
+            while j < amount:
+                item = self.tableWidget.itemAt(i, j)
+                if item.text() == "":
+                    exec = False
+                j += 1
+            i += 1
+
+        if exec:
+            i = 1
+            j = 1
+            while i < amount:
+                while j < amount:
+                    item = self.tableWidget.itemAt(i, j)
+                    print(item.text())
+                    if int(item.text()) == 1:
+                        matrix.append((i, j))
+                    j += 1
+                i += 1
+
+        self.plot()
+
+
     def plot(self):
         self.figure.clf()
         G = nx.Graph()
-        matrix = [(1, 2), (1, 3), (4, 2), (5, 1), (5, 2), (5, 3)]
         G.add_edges_from(matrix)
         nx.draw(G)
         self.canvas.draw_idle()
