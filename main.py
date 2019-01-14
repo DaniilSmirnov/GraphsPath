@@ -54,7 +54,6 @@ class MainWidget(QWidget):
         self.tableWidget.cellChanged.connect(self.get_matrix)
 
         self.show()
-        #self.plot3()
 
     def matrix_draw(self):
         amount = int(self.spinBox.text())
@@ -72,30 +71,27 @@ class MainWidget(QWidget):
         amount = int(self.spinBox.text())
 
         exec = True
-        i = 1
-        j = 1
-        while i < amount:
-            while j < amount:
-                item = self.tableWidget.itemAt(i, j)
-                if item.text() == "":
+
+        for i in range(0, amount, 1):
+            for j in range(0, amount, 1):
+                item = self.tableWidget.item(i, j)
+                if item is None:
                     exec = False
                 j += 1
             i += 1
 
         if exec:
-            i = 1
-            j = 1
-            while i < amount:
-                while j < amount:
-                    item = self.tableWidget.itemAt(i, j)
-                    print(item.text())
-                    if int(item.text()) == 1:
+            for i in range(0, amount, 1):
+                for j in range(0, amount, 1):
+                    item = self.tableWidget.item(i, j)
+                    if item.text() == "1":
                         matrix.append((i, j))
+                        print(item.text())
+
                     j += 1
                 i += 1
 
-        self.plot()
-
+            self.plot()
 
     def plot(self):
         self.figure.clf()
@@ -116,7 +112,7 @@ if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
     app.aboutToQuit.connect(app.deleteLater)
-    app.setStyle(QStyleFactory.create("gtk"))
+    #app.setStyle(QStyleFactory.create("gtk"))
     screen = MainWidget()
     screen.show()
     sys.exit(app.exec_())
