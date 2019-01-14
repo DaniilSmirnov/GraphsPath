@@ -8,6 +8,7 @@ import networkx as nx
 
 matrix = []
 
+
 class MainWidget(QWidget):
 
     def __init__(self):
@@ -18,7 +19,7 @@ class MainWidget(QWidget):
 
     def initUI(self):
 
-        self.setGeometry(100, 100, 800, 600)
+        #self.setGeometry(100, 100, 800, 600)
         self.center()
         self.setWindowTitle('S Plot')
 
@@ -36,6 +37,7 @@ class MainWidget(QWidget):
         self.tableWidget = QTableWidget()
         self.tableWidget.setObjectName("tableWidget")
         self.gridLayout.addWidget(self.tableWidget, 1, 0, 1, 2)
+        self.tableWidget.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Minimum)
         self.label = QLabel("Количество вершин")
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 2, 0, 1, 1)
@@ -66,6 +68,7 @@ class MainWidget(QWidget):
             i += 1
         self.tableWidget.setHorizontalHeaderLabels(headers)
         self.tableWidget.setVerticalHeaderLabels(headers)
+        self.tableWidget.resizeColumnsToContents()
 
     def get_matrix(self):
         amount = int(self.spinBox.text())
@@ -85,7 +88,7 @@ class MainWidget(QWidget):
                 for j in range(0, amount, 1):
                     item = self.tableWidget.item(i, j)
                     if item.text() == "1":
-                        matrix.append((i, j))
+                        matrix.append((i+1, j+1))
                         print(item.text())
 
                     j += 1
@@ -97,8 +100,13 @@ class MainWidget(QWidget):
         self.figure.clf()
         G = nx.Graph()
         G.add_edges_from(matrix)
-        nx.draw(G)
+        nx.draw(G, with_labels=True)
         self.canvas.draw_idle()
+
+        try:
+            self.label_3.setText(str(list(nx.eulerian_circuit(G))))
+        except nx.NetworkXError:
+            self.label_3.setText("В этом графе Эйлерова пути не существует")
 
     def center(self):
         qr = self.frameGeometry()
