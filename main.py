@@ -1,10 +1,8 @@
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import networkx as nx
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 matrix = []
 
@@ -19,9 +17,8 @@ class MainWidget(QWidget):
 
     def initUI(self):
 
-        #self.setGeometry(100, 100, 800, 600)
         self.center()
-        self.setWindowTitle('S Plot')
+        self.setWindowTitle('Поиск Эйлерова пути')
 
         self.gridLayout = QGridLayout()
         self.setLayout(self.gridLayout)
@@ -89,7 +86,6 @@ class MainWidget(QWidget):
                     item = self.tableWidget.item(i, j)
                     if item.text() == "1":
                         matrix.append((i+1, j+1))
-                        print(item.text())
 
                     j += 1
                 i += 1
@@ -104,7 +100,7 @@ class MainWidget(QWidget):
         self.canvas.draw_idle()
 
         try:
-            self.label_3.setText(str(list(nx.eulerian_circuit(G))))
+            self.label_3.setText("Эйлеров путь для введеного графа: " + str(list(nx.eulerian_circuit(G))))
         except nx.NetworkXError:
             self.label_3.setText("В этом графе Эйлерова пути не существует")
 
