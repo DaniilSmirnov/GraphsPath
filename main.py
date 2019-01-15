@@ -47,11 +47,12 @@ class MainWidget(QWidget):
 
         self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
-        self.gridLayout.addWidget(self.canvas, 0, 3, 9, 9)
+        self.gridLayout.addWidget(self.canvas, 0, 3, 4, 1)
 
         self.spinBox.valueChanged.connect(self.matrix_draw)
         self.tableWidget.cellChanged.connect(self.get_matrix)
 
+        self.spinBox.setValue(2)
         self.show()
 
     def matrix_draw(self):
@@ -116,7 +117,7 @@ if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
     app.aboutToQuit.connect(app.deleteLater)
-    #app.setStyle(QStyleFactory.create("gtk"))
+    app.setStyle("Fusion")
     screen = MainWidget()
     screen.show()
     sys.exit(app.exec_())
